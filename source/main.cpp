@@ -22,10 +22,10 @@ void WaitBackMenu()
     printf("\nPress B to return to menu.");
     while(appletMainLoop())
     {
-        hidScanInput();
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        padUpdate(&pad);
+        u64 kDown = padGetButtonsDown(&pad);
 
-        if (kDown & KEY_B) break;
+        if (kDown & HidNpadButton_B) break;
         
         gfxFlushBuffers();
         gfxSwapBuffers();
@@ -196,15 +196,20 @@ int main(int argc, char **argv)
     
     printInfo();
     
+    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+
+    PadState pad;
+    padInitializeDefault(&pad);
+    
     while(appletMainLoop())
     {
-        hidScanInput();
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
+        padUpdate(&pad);
+        u64 kDown = padGetButtonsDown(&pad);
 
-        if (kDown & KEY_PLUS) break;
-        if (kDown & KEY_A) dumpControls(true);
-        if (kDown & KEY_X) dumpControls(false);
-        if (kDown & KEY_Y) ListApplications();
+        if (kDown & HidNpadButton_Plus) break;
+        if (kDown & HidNpadButton_A) dumpControls(true);
+        if (kDown & HidNpadButton_X) dumpControls(false);
+        if (kDown & HidNpadButton_Y) ListApplications();
 
         gfxFlushBuffers();
         gfxSwapBuffers();
